@@ -1,5 +1,5 @@
 
-import edu.princeton.cs.algs4.StdOut;
+//import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 //import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
@@ -262,8 +262,9 @@ public class Percolation {
             randomNumber = getRandomNumber();
             open(randomNumber);
         }
-        StdOut.printf("Number of open Sites %d out of total %d sites. percentage = %f\n", totalOpen, totalCells,
-                (double) totalOpen / totalCells);
+        // StdOut.printf("Number of open Sites %d out of total %d sites. percentage =
+        // %f\n", totalOpen, totalCells,
+        // (double) totalOpen / totalCells);
         return true;
     }
 
