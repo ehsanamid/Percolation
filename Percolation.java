@@ -269,16 +269,6 @@ public class Percolation {
 
     // test client (optional)
     public static void main(String[] args) {
-        int n = 0;
-        if (args.length != 1) {
-            n = 5;
-        } else {
-            n = Integer.parseInt(args[0]);
-        }
-
-        Percolation perc = new Percolation(n);
-
-        perc.percolates();
 
     }
 }

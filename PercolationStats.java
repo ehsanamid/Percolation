@@ -1,12 +1,13 @@
 
 import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdRandom;
+//import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
+        int totalCells = n * n;
         if (n <= 0 || trials <= 0) {
             throw new IllegalArgumentException("n and trials must be greater than 0");
         }
@@ -14,12 +15,7 @@ public class PercolationStats {
         for (int i = 0; i < trials; i++) {
             Percolation perc = new Percolation(n);
             perc.percolates();
-            // while (!perc.percolates()) {
-            // int row = StdRandom.uniform(1, n + 1);
-            // int col = StdRandom.uniform(1, n + 1);
-            // perc.open(row, col);
-            // }
-            percs[i] = (double) perc.numberOfOpenSites() / (n * n);
+            percs[i] = (double) perc.numberOfOpenSites() / (totalCells);
         }
         StdOut.println("mean: " + StdStats.mean(percs));
         StdOut.println("stddev: " + StdStats.stddev(percs));
