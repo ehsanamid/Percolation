@@ -11,37 +11,33 @@ public class PercolationStats {
         if (n <= 0 || trials <= 0) {
             throw new IllegalArgumentException("n and trials must be greater than 0");
         }
-        double[] percs = new double[trials];
+        double[] iterations = new double[trials];
         for (int i = 0; i < trials; i++) {
             Percolation perc = new Percolation(n);
             perc.percolates();
-            percs[i] = (double) perc.numberOfOpenSites() / (totalCells);
+            iterations[i] = (double) perc.numberOfOpenSites() / (totalCells);
         }
-        StdOut.println("mean: " + StdStats.mean(percs));
-        StdOut.println("stddev: " + StdStats.stddev(percs));
-        StdOut.println(
-                "95% confidence interval: " + (StdStats.mean(percs) - 1.96 * StdStats.stddev(percs) / Math.sqrt(trials))
-                        + ", " + (StdStats.mean(percs) + 1.96 * StdStats.stddev(percs) / Math.sqrt(trials)));
+        
     }
 
     // sample mean of percolation threshold
     public double mean() {
-        return 0.0;
+        return StdStats.mean(iterations);
     }
 
     // sample standard deviation of percolation threshold
     public double stddev() {
-        return 0.0;
+        return StdStats.stddev(iterations);
     }
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return 0.0;
+        return (StdStats.mean(iterations) - 1.96 * StdStats.stddev(iterations) / Math.sqrt(trials));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return 0.0;
+        return (StdStats.mean(iterations) + 1.96 * StdStats.stddev(iterations) / Math.sqrt(trials));
     }
 
     // test client (see below)
