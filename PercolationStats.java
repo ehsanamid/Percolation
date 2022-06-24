@@ -1,11 +1,31 @@
 
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
     // perform independent trials on an n-by-n grid
     public PercolationStats(int n, int trials) {
-
+        if (n <= 0 || trials <= 0) {
+            throw new IllegalArgumentException("n and trials must be greater than 0");
+        }
+        double[] percs = new double[trials];
+        for (int i = 0; i < trials; i++) {
+            Percolation perc = new Percolation(n);
+            perc.percolates();
+            // while (!perc.percolates()) {
+            // int row = StdRandom.uniform(1, n + 1);
+            // int col = StdRandom.uniform(1, n + 1);
+            // perc.open(row, col);
+            // }
+            percs[i] = (double) perc.numberOfOpenSites() / (n * n);
+        }
+        StdOut.println("mean: " + StdStats.mean(percs));
+        StdOut.println("stddev: " + StdStats.stddev(percs));
+        StdOut.println(
+                "95% confidence interval: " + (StdStats.mean(percs) - 1.96 * StdStats.stddev(percs) / Math.sqrt(trials))
+                        + ", " + (StdStats.mean(percs) + 1.96 * StdStats.stddev(percs) / Math.sqrt(trials)));
     }
 
     // sample mean of percolation threshold
