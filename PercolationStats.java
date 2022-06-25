@@ -1,29 +1,105 @@
 
 import edu.princeton.cs.algs4.StdOut;
-//import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class PercolationStats {
 
-    double[] iterations;
-
-    int T;
+    private double[] iterations;
+    private int totalCells;
+    private int gridSize;
+    private int repeating;
+    private int listSize;
+    private int[] frequencies;
 
     // perform independent T on an n-by-n grid
     public PercolationStats(int n, int t) {
-
-        T = t;
-        int totalCells = n * n;
-        if (n <= 0 || T <= 0) {
+        repeating = t;
+        totalCells = n * n;
+        gridSize = n;
+        int randomNumber;
+        if (n <= 0 || repeating <= 0) {
             throw new IllegalArgumentException("n and T must be greater than 0");
         }
-        iterations = new double[T];
-        for (int i = 0; i < T; i++) {
+        iterations = new double[repeating];
+        int lowRange, highRange;
+        lowRange = gridSize;
+        highRange = gridSize * (gridSize + 1);
+        for (int i = 0; i < repeating; i++) {
             Percolation perc = new Percolation(n);
-            perc.percolates();
+            getRandomNumberInitialize(lowRange, highRange);
+            while (!perc.percolates()) {
+
+                // randomNumber = StdRandom.uniform(lowRange, highRange);
+                randomNumber = getRandomNumber();
+                // StdOut.println("randomNumber: " + randomNumber);
+                perc.open(randomNumber / gridSize, randomNumber % gridSize + 1);
+
+            }
+            // StdOut.printf("perc.numberOfOpenSites %d \n", perc.numberOfOpenSites());
             iterations[i] = (double) perc.numberOfOpenSites() / (totalCells);
         }
 
+    }
+
+    // perform independent T on an n-by-n grid
+
+    // public PercolationStats(int n, int t) {
+
+    // repeating = t;
+    // totalCells = n * n;
+    // gridSize = n;
+    // int randomNumber;
+    // if (n <= 0 || repeating <= 0) {
+    // throw new IllegalArgumentException("n and T must be greater than 0");
+    // }
+    // iterations = new double[repeating];
+    // getRandomNumberInitialize();
+
+    // for (int i = 0; i < repeating; i++) {
+    // Percolation perc = new Percolation(n);
+    // while (!perc.percolates()) {
+    // randomNumber = getRandomNumber();
+    // perc.open(randomNumber / gridSize + 1, randomNumber % gridSize + 1);
+    // }
+    // perc.percolates();
+    // iterations[i] = (double) perc.numberOfOpenSites() / (totalCells);
+    // }
+
+    // }
+
+    // get a random number between 0 and totalCells - 1
+    private void getRandomNumberInitialize(int minVal, int maxValue) {
+        listSize = maxValue - minVal;
+        int j = 0;
+        frequencies = new int[listSize];
+        for (int i = minVal; i < maxValue; i++) {
+            frequencies[j++] = i;
+        }
+        return;
+
+    }
+
+    // get a random number between 0 and totalCells - 1
+    private int getRandomNumber() {
+
+        int randomNmber = 0;
+        int k = 0;
+        int returnValue = 0;
+        randomNmber = StdRandom.uniform(0, listSize);
+        returnValue = frequencies[randomNmber];
+        frequencies[randomNmber] = -1;
+        int[] newfrequencies = new int[listSize - 1];
+        k = 0;
+        for (int j = 0; j < listSize; j++) {
+            if (frequencies[j] != -1) {
+                newfrequencies[k++] = frequencies[j];
+            }
+        }
+        frequencies = newfrequencies;
+        listSize--;
+
+        return returnValue;
     }
 
     // sample mean of percolation threshold
@@ -38,12 +114,12 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return (StdStats.mean(iterations) - 1.96 * StdStats.stddev(iterations) / Math.sqrt(T));
+        return (StdStats.mean(iterations) - 1.96 * StdStats.stddev(iterations) / Math.sqrt(repeating));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return (StdStats.mean(iterations) + 1.96 * StdStats.stddev(iterations) / Math.sqrt(T));
+        return (StdStats.mean(iterations) + 1.96 * StdStats.stddev(iterations) / Math.sqrt(repeating));
     }
 
     // test client (see below)
