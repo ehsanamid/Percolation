@@ -5,17 +5,18 @@ import edu.princeton.cs.algs4.StdRandom;
 
 public class PercolationStats {
 
-    private double[] iterations;
-    private int totalCells;
-    private int gridSize;
-    private int repeating;
+    private final double CONFIDENCE_95 = 1.96;
+    private final double[] iterations;
+    // private int totalCells;
+    private final int gridSize;
+    private final int repeating;
     private int listSize;
     private int[] frequencies;
 
     // perform independent T on an n-by-n grid
     public PercolationStats(int n, int t) {
         repeating = t;
-        totalCells = n * n;
+        int totalCells = n * n;
         gridSize = n;
         int randomNumber;
         if (n <= 0 || repeating <= 0) {
@@ -38,6 +39,7 @@ public class PercolationStats {
             }
             // StdOut.printf("perc.numberOfOpenSites %d \n", perc.numberOfOpenSites());
             iterations[i] = (double) perc.numberOfOpenSites() / (totalCells);
+            frequencies = null;
         }
 
     }
@@ -76,7 +78,6 @@ public class PercolationStats {
         for (int i = minVal; i < maxValue; i++) {
             frequencies[j++] = i;
         }
-        return;
 
     }
 
@@ -98,7 +99,7 @@ public class PercolationStats {
         }
         frequencies = newfrequencies;
         listSize--;
-
+        newfrequencies = null;
         return returnValue;
     }
 
@@ -114,22 +115,22 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        return (StdStats.mean(iterations) - 1.96 * StdStats.stddev(iterations) / Math.sqrt(repeating));
+        return (StdStats.mean(iterations) - CONFIDENCE_95 * StdStats.stddev(iterations) / Math.sqrt(repeating));
     }
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        return (StdStats.mean(iterations) + 1.96 * StdStats.stddev(iterations) / Math.sqrt(repeating));
+        return (StdStats.mean(iterations) + CONFIDENCE_95 * StdStats.stddev(iterations) / Math.sqrt(repeating));
     }
 
     // test client (see below)
     public static void main(String[] args) {
         int n = 0;
-        int T = 0;
+        int t = 0;
         if (args.length == 2) {
             n = Integer.parseInt(args[0]);
-            T = Integer.parseInt(args[1]);
-            PercolationStats ps = new PercolationStats(n, T);
+            t = Integer.parseInt(args[1]);
+            PercolationStats ps = new PercolationStats(n, t);
             StdOut.printf("mean                    = %f\n", ps.mean());
             StdOut.printf("stddev                  = %f\n", ps.stddev());
             StdOut.printf("95%% confidence interval = [%f, %f]\n", ps.confidenceLo(), ps.confidenceHi());
