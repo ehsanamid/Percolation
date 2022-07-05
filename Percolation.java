@@ -184,9 +184,6 @@ public class Percolation {
     public static void main(String[] args) {
         Percolation percolation = new Percolation(5);
         Percolation percolation1 = new Percolation(20);
-        Percolation percolation2 = new Percolation(25);
-        Percolation percolation3 = new Percolation(35);
-        Percolation percolation4 = new Percolation(45);
 
         // System.out.println(percolation.isOpen(2, 1));
         // System.out.println(percolation1.isOpen(3, 11));
